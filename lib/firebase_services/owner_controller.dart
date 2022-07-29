@@ -177,11 +177,11 @@ class OwnerController {
     required Bid bid,
   }) async {
     assert(bid != null);
-    await requests.doc(bid.request.requestId).update({
+    await requests.doc(bid.request?.requestId).update({
       "biddenBy": FieldValue.arrayUnion([bid.ownerId])
     });
     return requests
-        .doc(bid.request.requestId)
+        .doc(bid.request?.requestId)
         .collection("bids")
         .doc(bid.ownerId)
         .set(bid.toJson());
@@ -211,11 +211,11 @@ class OwnerController {
 
   static markAsComplete(Bid bid) async {
     await requests
-        .doc(bid.request.requestId)
+        .doc(bid.request?.requestId)
         .update({"status": "owner_marked_as_complete"});
 
     return requests
-        .doc(bid.request.requestId)
+        .doc(bid.request?.requestId)
         .collection("bids")
         .doc(bid.ownerId)
         .update({"status": "owner_marked_as_complete"});

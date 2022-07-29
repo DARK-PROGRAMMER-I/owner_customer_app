@@ -29,33 +29,35 @@ class AlgoliaTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: Theme.of(context).copyWith(
-        primaryColor: Colors.black,
-      ),
-      child: TextFormField(
-        style: textStyle ??
-            TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-        onChanged: (value){
-          onChanged!(value);
-        },
-        onTap: (){
-          onTap!();
-        },
-        maxLength: maxLength,
-        keyboardType: keyboardType ?? TextInputType.text,
-        initialValue: initialValue,
-        controller: controller,
-        readOnly: readOnly ?? false,
-        decoration: InputDecoration(
-          enabledBorder: OutlineInputBorder(),
-          focusedBorder:
-              OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
-          labelText: label,
-          prefixIcon: prefixIcon,
-          suffixIcon: suffixIcon,
-          labelStyle:
+    return SingleChildScrollView(
+      child: Theme(
+        data: Theme.of(context).copyWith(
+          primaryColor: Colors.black,
+        ),
+        child: TextFormField(
+          style: textStyle ??
               TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          onChanged: (value){
+            onChanged!(value);
+          },
+          onTap: (){
+            onTap!();
+          },
+          maxLength: maxLength,
+          keyboardType: keyboardType ?? TextInputType.text,
+          initialValue: initialValue,
+          controller: controller,
+          readOnly: readOnly ?? false,
+          decoration: InputDecoration(
+            enabledBorder: OutlineInputBorder(),
+            focusedBorder:
+                OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
+            labelText: label,
+            prefixIcon: prefixIcon,
+            suffixIcon: suffixIcon,
+            labelStyle:
+                TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          ),
         ),
       ),
     );

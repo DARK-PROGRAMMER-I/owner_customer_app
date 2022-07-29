@@ -62,7 +62,7 @@ class _BidDetailsViewState extends State<BidDetailsView> {
           ),
           Padding(
             padding: const EdgeInsets.only(top:32,left: 8,right: 8),
-            child: RequestCard(request: widget.bid.request),
+            child: RequestCard(request: widget.bid.request!),
           ),
           Padding(
             padding: const EdgeInsets.only(

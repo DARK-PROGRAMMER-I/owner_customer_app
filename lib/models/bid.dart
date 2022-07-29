@@ -2,14 +2,14 @@ import 'package:WSHCRD/models/request.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Bid {
-  late double amount;
-  late String type;
-  late String ownerId;
-  late String storeName;
-  late GeoPoint storeLocation;
-  late String status;
-  late DateTime biddenAt;
-  late Request request;
+  double? amount;
+  String? type;
+  String? ownerId;
+  String? storeName;
+  GeoPoint? storeLocation;
+  String? status;
+  DateTime? biddenAt;
+  Request? request;
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -20,7 +20,7 @@ class Bid {
     data["storeLocation"] = storeLocation;
     data["status"] = status;
     data["biddenAt"] = biddenAt;
-    data["request"] = request.toJson();
+    data["request"] = request?.toJson();
     return data;
   }
 

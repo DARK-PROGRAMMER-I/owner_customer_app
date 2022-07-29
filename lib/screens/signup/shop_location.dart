@@ -16,8 +16,8 @@ class ShopLocation extends StatefulWidget {
 }
 
 class _ShopLocationState extends State<ShopLocation> {
-  late var location;
-  late LatLng latLng;
+  var location;
+  LatLng? latLng;
   String address = "";
 
   getShopLocation() async {
@@ -118,10 +118,10 @@ class _ShopLocationState extends State<ShopLocation> {
                           markers: {
                             Marker(
                                 markerId: const MarkerId("random"),
-                                position: latLng)
+                                position: latLng!)
                           },
                           initialCameraPosition:
-                              CameraPosition(target: latLng, zoom: 10),
+                              CameraPosition(target: latLng!, zoom: 10),
                         ),
                       ),
                     ],

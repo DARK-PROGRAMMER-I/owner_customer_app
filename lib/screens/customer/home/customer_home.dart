@@ -158,15 +158,9 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 8.0),
                                       child: StreamBuilder<QuerySnapshot>(
-                                          stream: CustomerController
-                                              .getAllActiveRequests(
-                                                  SessionController
-                                                          .getCustomerInfoFromLocal()
-                                                      .customerId!,
-                                                  DateTime.now()
-                                                      .toUtc()
-                                                      .subtract(
-                                                          const Duration(hours: 24))),
+                                          stream: CustomerController.getAllActiveRequests(
+                                              SessionController.getCustomerInfoFromLocal().customerId!,
+                                                  DateTime.now().toUtc().subtract(const Duration(hours: 24))),
                                           builder: (context, snapshot) {
                                             if (snapshot.hasData) {
                                               if (snapshot.data == null) {

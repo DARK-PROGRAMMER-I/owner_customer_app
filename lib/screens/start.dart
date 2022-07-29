@@ -122,8 +122,7 @@ class _StartState extends State<Start> {
                                 ),
                                 hintText: "55555 55555",
                               ),
-                              initialValue:
-                                  PhoneNumber(phoneNumber: phoneNumber),
+                              initialValue: PhoneNumber(phoneNumber: phoneNumber),
                               onInputChanged: (PhoneNumber value) {
                                 phoneNumber = value.phoneNumber!;
 

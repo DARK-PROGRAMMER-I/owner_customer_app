@@ -82,11 +82,11 @@ class _MyBidsViewState extends State<MyBidsView> {
                   Bid bid = Bid
                       .fromJson(
                       snapshot.data!.docs[index].data as Map<String,dynamic>);
-                  Request request = bid.request;
+                  Request? request = bid.request;
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: RequestCard(
-                        request: request,
+                        request: request!,
                         color: kColorSlabs[index % kColorSlabs.length],
                         onPressedSeeBid: () {
                           Navigator.of(context).pushNamed(

@@ -19,14 +19,14 @@ class OwnerProfile extends StatefulWidget {
 }
 
 class _OwnerProfileState extends State<OwnerProfile> {
-  late String businessName;
-  late String phoneNumber;
-  late String category;
-  late Owner owner;
+  String? businessName;
+  String? phoneNumber;
+  String? category;
+  Owner? owner;
 
   @override
   void initState() {
-    showLoadingScreen();
+    // showLoadingScreen();
     businessName = SessionController.getBusinessName();
     phoneNumber = SessionController.getPhoneNumber();
     category = SessionController.getCategory();
@@ -41,9 +41,9 @@ class _OwnerProfileState extends State<OwnerProfile> {
     owner = ownerResult as Owner;
     if (owner != null) {
       setState(() {
-        businessName = owner.businessName.toString();
-        phoneNumber = owner.phoneNumber.toString();
-        category = owner.category.toString();
+        businessName = owner?.businessName.toString();
+        phoneNumber = owner?.phoneNumber.toString();
+        category = owner?.category.toString();
       });
     }
   }
@@ -96,7 +96,7 @@ class _OwnerProfileState extends State<OwnerProfile> {
                                             radius: 17,
                                             backgroundColor: Colors.yellow,
                                             child: Text(
-                                              businessName[0],
+                                              businessName![0],
                                               style: const TextStyle(
                                                   fontSize: 17,
                                                   color: Colors.black,
@@ -110,7 +110,7 @@ class _OwnerProfileState extends State<OwnerProfile> {
                                             CrossAxisAlignment.start,
                                         children: <Widget>[
                                           Text(
-                                            businessName,
+                                            businessName!,
                                             style: const TextStyle(
                                                 fontSize: 18,
                                                 color: Colors.white,
@@ -127,7 +127,7 @@ class _OwnerProfileState extends State<OwnerProfile> {
                                                 color: Colors.white,
                                               ),
                                               Text(
-                                                phoneNumber,
+                                                phoneNumber!,
                                                 style: const TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 16,
@@ -140,7 +140,7 @@ class _OwnerProfileState extends State<OwnerProfile> {
                                             height: 4,
                                           ),
                                           Text(
-                                            category,
+                                            category!,
                                             style: const TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 19,
@@ -200,7 +200,7 @@ class _OwnerProfileState extends State<OwnerProfile> {
                                     ),
                                   ),
                                   Expanded(
-                                    child: Text(owner.address ?? "",
+                                    child: Text(owner?.address ?? "",
                                         style: const TextStyle(
                                             fontSize: 13,
                                             fontWeight: FontWeight.w600)),
@@ -220,10 +220,10 @@ class _OwnerProfileState extends State<OwnerProfile> {
                                         _pickResult as PickResult;
                                     if (pickResult != null &&
                                         pickResult.geometry != null) {
-                                      owner.location = GeoFirePoint(
+                                      owner?.location = GeoFirePoint(
                                           pickResult.geometry!.location.lat,
                                           pickResult.geometry!.location.lng);
-                                      owner.address =
+                                      owner?.address =
                                           pickResult.formattedAddress;
                                       showLoadingScreen();
                                       await AuthController.changeOwnerInfo(
@@ -259,7 +259,11 @@ class _OwnerProfileState extends State<OwnerProfile> {
                           .translate('user_not_found')));
                 }
               } else {
-                return Container();
+                return Center(
+                  child: Container(
+                    child: Text('Im Empty Container'),
+                  ),
+                );
               }
             }),
       ),

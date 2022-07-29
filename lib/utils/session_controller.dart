@@ -56,7 +56,9 @@ class SessionController {
   }
 
   static Customer getCustomerInfoFromLocal() {
-    return Customer.fromJson(jsonDecode(_sharedPrefs.getString(KEY_CUSTOMER)!));
+    String ? key = _sharedPrefs.getString(KEY_CUSTOMER);
+    print(jsonDecode(key!));
+    return Customer.fromJson(jsonDecode(key ?? ''));
   }
 
   static void setUid(String uid) {

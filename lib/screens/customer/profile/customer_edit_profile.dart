@@ -14,13 +14,14 @@ class CustomerEditProfile extends StatefulWidget {
 }
 
 class _CustomerEditProfileState extends State<CustomerEditProfile> {
- late Customer customer;
+ Customer? customer;
   TextEditingController phoneNumberController = TextEditingController();
 
   @override
   void initState() {
     customer = SessionController.getCustomerInfoFromLocal();
-    phoneNumberController.text = customer.phoneNumber!;
+    print(customer.toString() + 'Hey Im here' );
+    phoneNumberController.text = customer!.phoneNumber!;
     super.initState();
   }
 
@@ -59,10 +60,10 @@ class _CustomerEditProfileState extends State<CustomerEditProfile> {
                           style: TextStyle(fontWeight: FontWeight.w600),
                         ),
                         TextFormField(
-                          initialValue: customer.displayName,
+                          initialValue: customer?.displayName,
                           onChanged: (value) {
                             setState(() {
-                              customer.displayName = value;
+                              customer?.displayName = value;
                             });
                           },
                           style: TextStyle(fontWeight: FontWeight.w600, fontSize: 24),
@@ -104,7 +105,7 @@ class _CustomerEditProfileState extends State<CustomerEditProfile> {
                         TextFormField(
                           onChanged: (value) {
                             setState(() {
-                              customer.phoneNumber = value;
+                              customer?.phoneNumber = value;
                             });
                           },
                           controller: phoneNumberController,
@@ -123,8 +124,8 @@ class _CustomerEditProfileState extends State<CustomerEditProfile> {
   }
 
   bool hasDataChanged() {
-    return SessionController.getDisplayName() != customer.displayName ||
-        SessionController.getPhoneNumber() != customer.phoneNumber;
+    return SessionController.getDisplayName() != customer?.displayName ||
+        SessionController.getPhoneNumber() != customer?.phoneNumber;
   }
 
   /*
@@ -147,14 +148,14 @@ class _CustomerEditProfileState extends State<CustomerEditProfile> {
                     onPressed: () {
                       Customer localCustomer = SessionController.getCustomerInfoFromLocal();
                       phoneNumberController.text = localCustomer.phoneNumber!;
-                      customer.phoneNumber = localCustomer.phoneNumber;
+                      customer?.phoneNumber = localCustomer.phoneNumber;
                       Navigator.of(context).pop();
                     },
                   ),
                   FlatButton(
                     child: Text("YES"),
                     onPressed: () async {
-                      customer.uid = null;
+                      customer?.uid = null;
                       await updateUser();
                       logOutAndReturnToLoginScreen(context);
                     },
@@ -180,7 +181,7 @@ class _CustomerEditProfileState extends State<CustomerEditProfile> {
   }
 
   bool hasPhoneNumberChanged() {
-    return SessionController.getCustomerInfoFromLocal().phoneNumber != customer.phoneNumber;
+    return SessionController.getCustomerInfoFromLocal().phoneNumber != customer?.phoneNumber;
   }
 
   updateUser() async {
@@ -194,6 +195,6 @@ class _CustomerEditProfileState extends State<CustomerEditProfile> {
   Save changes to firebase
    */
   saveChanges() async {
-    await AuthController.changeCustomerInfo(customer);
+    await AuthController.changeCustomerInfo(customer!);
   }
 }

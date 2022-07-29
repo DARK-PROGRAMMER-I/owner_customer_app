@@ -149,7 +149,7 @@ class BidCard extends StatelessWidget {
                     ),
                     const SizedBox(width: 8,),
                     Text(
-                      bid.storeName,
+                      bid.storeName!,
                       style: const TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -166,7 +166,7 @@ class BidCard extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Row(
               children: [
-                Expanded(child: getDistanceIndicator(bid.request, bid.storeLocation)),
+                Expanded(child: getDistanceIndicator(bid.request!, bid.storeLocation!)),
                 Expanded(child: buildDeliveryType()),
               ],
             ),
@@ -243,7 +243,7 @@ class BidCard extends StatelessWidget {
     var creationDate = now.subtract(Duration(
         milliseconds: now
             .difference(DateTime.fromMillisecondsSinceEpoch(
-            bid.biddenAt.millisecondsSinceEpoch ?? 0,
+            bid.biddenAt?.millisecondsSinceEpoch ?? 0,
             isUtc: true))
             .inMilliseconds));
     return timeago.format(creationDate);

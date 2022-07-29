@@ -7,13 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 
 class AcceptBidViewArguments {
-  final Bid bid;
+  final Bid? bid;
 
   AcceptBidViewArguments(this.bid);
 }
 
 class AcceptBidView extends StatefulWidget {
-  final Bid bid;
+  final Bid? bid;
   static const routeName = "/accept-bid-view";
 
   const AcceptBidView({Key? key, required this.bid}) : super(key: key);
@@ -23,7 +23,7 @@ class AcceptBidView extends StatefulWidget {
 }
 
 class _AcceptBidViewState extends State<AcceptBidView> {
- late Bid bid;
+  Bid? bid;
   @override
   void initState() {
     this.bid = widget.bid;
@@ -79,7 +79,7 @@ class _AcceptBidViewState extends State<AcceptBidView> {
                   width: 8,
                 ),
                 Text(
-                  bid.storeName,
+                  bid!.storeName!,
                   style: const TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
@@ -95,7 +95,7 @@ class _AcceptBidViewState extends State<AcceptBidView> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 getDistanceIndicator(
-                    bid.request, bid.storeLocation),
+                    bid!.request!, bid!.storeLocation!),
                 buildDeliveryType(),
               ],
             ),
@@ -106,7 +106,7 @@ class _AcceptBidViewState extends State<AcceptBidView> {
                 bottom: 8,
               ),
               child: Text(
-                "₹ ${bid.amount}/-",
+                "₹ ${bid?.amount}/-",
                 // "₹ ${widget.bid.amount}/-",
                 style: const TextStyle(
                   color: Color(0xFF3642E9),
@@ -154,7 +154,7 @@ class _AcceptBidViewState extends State<AcceptBidView> {
               height: 47,
               margin: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 32),
               child: TextButton(
-                onPressed: bid.status == "owner_marked_as_complete"?markAsComplete:null,
+                onPressed: bid?.status == "owner_marked_as_complete"?markAsComplete:null,
                 child: const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16.0),
                   child: Text(
@@ -239,7 +239,7 @@ class _AcceptBidViewState extends State<AcceptBidView> {
           height: 10,
         ),
         Text(
-          bid.type == "home_delivery" ? "Home Delivery" : "Store Pickup",
+          bid?.type == "home_delivery" ? "Home Delivery" : "Store Pickup",
           style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
         ),
       ],
@@ -247,11 +247,11 @@ class _AcceptBidViewState extends State<AcceptBidView> {
   }
 
   void markAsComplete() {
-    CustomerController.markAsComplete(bid);
+    CustomerController.markAsComplete(bid!);
   }
 
   void listenForBidUpdated() {
-    CustomerController.getBid(bid).listen((event) {
+    CustomerController.getBid(bid!).listen((event) {
       if(event.exists && event.data!=null) {
         setState(() {
           bid = Bid.fromJson(event.data as Map<String,dynamic>);

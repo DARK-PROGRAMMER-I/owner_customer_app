@@ -226,7 +226,7 @@ class _PaymentViewState extends State<PaymentView> {
                 builder: (context, snapshot) {
                   if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
                     paymentList = snapshot.data!.docs.map((e) => Payment.fromJson(e.data as Map<String,dynamic>)).toList();
-                    paymentList ??= [];
+                    paymentList ?? [];
 
                     // iterate over the payments to show the balance and and all the other info
 

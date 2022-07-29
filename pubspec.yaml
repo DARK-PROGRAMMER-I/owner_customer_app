@@ -28,7 +28,8 @@ dependencies:
   hexcolor: ^2.0.7
   step_progress_indicator: ^1.0.2
 #  international_phone_input: ^1.0.4
-  google_maps_flutter: 
+
+  google_maps_flutter:
   google_maps_place_picker: ^2.1.0-nullsafety.3
   cloud_firestore: ^3.4.1
   firebase_auth: ^3.6.0

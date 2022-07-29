@@ -11,8 +11,8 @@ class CustomerProfileView extends StatefulWidget {
 }
 
 class _CustomerProfileViewState extends State<CustomerProfileView> {
- late String displayName;
- late String phoneNumber;
+ String? displayName;
+ String? phoneNumber;
 
   @override
   void initState() {
@@ -38,7 +38,7 @@ class _CustomerProfileViewState extends State<CustomerProfileView> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: const Text(
-          'Profile',
+          'Profile Hola ',
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
         ),
       ),
@@ -67,7 +67,7 @@ class _CustomerProfileViewState extends State<CustomerProfileView> {
                                 radius: 17,
                                 backgroundColor: Colors.yellow,
                                 child: Text(
-                                  displayName[0],
+                                  displayName![0],
                                   style: const TextStyle(fontSize: 17, color: Colors.black, fontWeight: FontWeight.w700),
                                 ),
                               ),
@@ -77,7 +77,7 @@ class _CustomerProfileViewState extends State<CustomerProfileView> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(
-                                displayName,
+                                displayName!,
                                 style: const TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.w700),
                               ),
                               const SizedBox(
@@ -91,7 +91,7 @@ class _CustomerProfileViewState extends State<CustomerProfileView> {
                                     color: Colors.white,
                                   ),
                                   Text(
-                                    phoneNumber,
+                                    phoneNumber!,
                                     style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w700),
                                   ),
                                 ],

@@ -28,29 +28,29 @@ class CreditBook extends StatefulWidget {
 class _CreditBookState extends State<CreditBook> {
   List<Customer> mainCustomerList = [];
   List<Customer> tempCustomerList = [];
-  late String businessName;
-  late StreamController<List<Customer>> customerStreamController;
+  String? businessName;
+  StreamController<List<Customer>>? customerStreamController;
   TextEditingController searchTextController = new TextEditingController();
   bool isCustomerHeaderShown = false;
   bool isContactHeaderShown = false;
-  late FocusNode searchFocus;
-  late Owner owner;
-  Map<String, Ledger> customerToLedgerMap = {};
-  Map<String, int> customersIndexMap = {};
-  late Stream<QuerySnapshot> mainCustomerStream;
-  late Stream customerStream;
-  late StreamSubscription mainCustomerStreamSubscription;
+  FocusNode? searchFocus;
+   Owner? owner;
+  Map<String, Ledger> ?customerToLedgerMap;
+  Map<String, int> ?customersIndexMap;
+  Stream<QuerySnapshot>? mainCustomerStream;
+  Stream? customerStream;
+  StreamSubscription? mainCustomerStreamSubscription;
 
   @override
   void initState() {
     customerStreamController = StreamController<List<Customer>>();
-    customerStream = customerStreamController.stream.asBroadcastStream();
+    customerStream = customerStreamController?.stream.asBroadcastStream();
     businessName = SessionController.getBusinessName();
     owner = SessionController.getOwnerInfoFromLocal();
     requestPermission(Permission.contacts);
-    mainCustomerStream = OwnerController.getCustomersStream(owner.ownerId!);
+    mainCustomerStream = OwnerController.getCustomersStream(owner!.ownerId!);
     mainCustomerStreamSubscription =
-        mainCustomerStream.listen(getStreamListener());
+        mainCustomerStream?.listen(getStreamListener());
     super.initState();
   }
 
@@ -66,36 +66,36 @@ class _CreditBookState extends State<CreditBook> {
       creation date so that the last modified customer is shown on top
        */
       mainCustomerList.sort((a, b) {
-        if (!customerToLedgerMap.containsKey(b.customerId)) {
+        if (!customerToLedgerMap!.containsKey(b.customerId)) {
           return 1;
-        } else if (!customerToLedgerMap.containsKey(a.customerId)) {
+        } else if (!customerToLedgerMap!.containsKey(a.customerId)) {
           return -1;
-        } else if (customerToLedgerMap[a.customerId]?.lastUpdateDateInEpoc ==
+        } else if (customerToLedgerMap![a.customerId]?.lastUpdateDateInEpoc ==
                 null &&
-            customerToLedgerMap[b.customerId]?.lastUpdateDateInEpoc == null) {
-          return customerToLedgerMap[b.customerId]!.creationDateInEpoc! -
-              customerToLedgerMap[a.customerId]!.creationDateInEpoc!;
-        } else if (customerToLedgerMap[a.customerId]?.lastUpdateDateInEpoc ==
+            customerToLedgerMap![b.customerId]?.lastUpdateDateInEpoc == null) {
+          return customerToLedgerMap![b.customerId]!.creationDateInEpoc! -
+              customerToLedgerMap![a.customerId]!.creationDateInEpoc!;
+        } else if (customerToLedgerMap![a.customerId]?.lastUpdateDateInEpoc ==
             null) {
-          return customerToLedgerMap[b.customerId]!.lastUpdateDateInEpoc! -
-              customerToLedgerMap[a.customerId]!.creationDateInEpoc!;
-        } else if (customerToLedgerMap[b.customerId]?.lastUpdateDateInEpoc ==
+          return customerToLedgerMap![b.customerId]!.lastUpdateDateInEpoc! -
+              customerToLedgerMap![a.customerId]!.creationDateInEpoc!;
+        } else if (customerToLedgerMap![b.customerId]?.lastUpdateDateInEpoc ==
             null) {
-          return customerToLedgerMap[b.customerId]!.creationDateInEpoc! -
-              customerToLedgerMap[a.customerId]!.lastUpdateDateInEpoc!;
+          return customerToLedgerMap![b.customerId]!.creationDateInEpoc! -
+              customerToLedgerMap![a.customerId]!.lastUpdateDateInEpoc!;
         } else {
-          return customersIndexMap[a.customerId]! -
-              customersIndexMap[b.customerId]!;
+          return customersIndexMap![a.customerId]! -
+              customersIndexMap![b.customerId]!;
         }
       });
-      customerStreamController.add(mainCustomerList);
+      customerStreamController?.add(mainCustomerList);
     };
   }
 
   @override
   void dispose() {
-    customerStreamController.close();
-    mainCustomerStreamSubscription.cancel();
+    customerStreamController?.close();
+    mainCustomerStreamSubscription?.cancel();
     super.dispose();
   }
 
@@ -124,139 +124,141 @@ class _CreditBookState extends State<CreditBook> {
           child: Container(
             color: Colors.white,
             margin: const EdgeInsets.only(left: 10, right: 10),
-            child: Column(
-              children: <Widget>[
-                Container(
-                  child: TextFormField(
-                    focusNode: searchFocus,
-                    controller: searchTextController,
-                    onChanged: (value) {
-                      showSearchedContactsToTheList(value);
-                    },
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(
-                        Icons.search,
-                        size: 25,
-                        color: Colors.black,
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    child: TextFormField(
+                      focusNode: searchFocus,
+                      controller: searchTextController,
+                      onChanged: (value) {
+                        showSearchedContactsToTheList(value);
+                      },
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(
+                          Icons.search,
+                          size: 25,
+                          color: Colors.black,
+                        ),
+                        hintText: "search or add",
+                        hintStyle: TextStyle(
+                            fontSize: 13,
+                            color: Colors.black.withOpacity(0.5),
+                            fontWeight: FontWeight.w700),
+                        enabledBorder: InputBorder.none,
+                        focusedBorder: InputBorder.none,
                       ),
-                      hintText: "search or add",
-                      hintStyle: TextStyle(
-                          fontSize: 13,
-                          color: Colors.black.withOpacity(0.5),
-                          fontWeight: FontWeight.w700),
-                      enabledBorder: InputBorder.none,
-                      focusedBorder: InputBorder.none,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: const BorderRadius.all(Radius.circular(5)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.2),
+                          spreadRadius: 5,
+                          blurRadius: 5,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
                     ),
                   ),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: const BorderRadius.all(Radius.circular(5)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.2),
-                        spreadRadius: 5,
-                        blurRadius: 5,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                ),
-                StreamBuilder<QuerySnapshot>(
-                    stream:
-                        OwnerController.getAllLedgersForOwner(owner.ownerId!),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        if (snapshot.data?.docs != null &&
-                            snapshot.data!.docs.isNotEmpty) {
-                          customerToLedgerMap = {};
-                          customersIndexMap = {};
-                          int count = 0;
+                  StreamBuilder<QuerySnapshot>(
+                      stream:
+                          OwnerController.getAllLedgersForOwner(owner!.ownerId!),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          if (snapshot.data?.docs != null &&
+                              snapshot.data!.docs.isNotEmpty) {
+                            customerToLedgerMap = {};
+                            customersIndexMap = {};
+                            int count = 0;
 
-                          //Getting all the ledgers so that last payment or modified dates can be found.
-                          snapshot.data!.docs.forEach((element) {
-                            Ledger ledger = Ledger.fromJson(
-                                element.data as Map<String, dynamic>);
-                            customerToLedgerMap[ledger.customerId!] = ledger;
-                            customersIndexMap[ledger.customerId!] = count++;
-                          });
+                            //Getting all the ledgers so that last payment or modified dates can be found.
+                            snapshot.data!.docs.forEach((element) {
+                              Ledger ledger = Ledger.fromJson(
+                                  element.data() as Map<String, dynamic>);
+                              customerToLedgerMap![ledger.customerId!] = ledger;
+                              customersIndexMap![ledger.customerId!] = count++;
+                            });
 
-                          if (mainCustomerStreamSubscription != null) {
-                            mainCustomerStreamSubscription.cancel();
-                          }
-                          mainCustomerStream =
-                              OwnerController.getCustomersStream(
-                                  owner.ownerId!);
-                          mainCustomerStreamSubscription =
-                              mainCustomerStream.listen(getStreamListener());
-                          return Expanded(
-                            child: StreamBuilder<List<Customer>>(
-                              stream: customerStream as Stream<List<Customer>>,
-                              builder: (context, snapshot) {
-                                isCustomerHeaderShown = false;
-                                isContactHeaderShown = false;
-                                if (snapshot.hasData) {
+                            if (mainCustomerStreamSubscription != null) {
+                              mainCustomerStreamSubscription?.cancel();
+                            }
+                            mainCustomerStream =
+                                OwnerController.getCustomersStream(
+                                    owner!.ownerId!);
+                            mainCustomerStreamSubscription =
+                                mainCustomerStream?.listen(getStreamListener());
+                            return Expanded(
+                              child: StreamBuilder<List<Customer>>(
+                                stream: customerStream as Stream<List<Customer>>,
+                                builder: (context, snapshot) {
                                   isCustomerHeaderShown = false;
                                   isContactHeaderShown = false;
-                                  if (snapshot.data!.isNotEmpty) {
-                                    List<Customer> customerList =
-                                        snapshot.data!;
-                                    return ListView.builder(
-                                        itemCount: customerList.length,
-                                        itemBuilder: (context, index) =>
-                                            processListItem(
-                                                context, index, customerList));
-                                  } else if (searchTextController.text ==
-                                          null ||
-                                      searchTextController.text.isEmpty) {
-                                    return Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: const <Widget>[
-                                        Image(
-                                          image: AssetImage(
-                                              'assets/fogg-no-messages.png'),
-                                        ),
-                                        Text(
-                                          'click on "Add cutomer" to get started',
-                                          style: TextStyle(
-                                              color: Color(0xff1d4ff2),
-                                              fontWeight: FontWeight.bold),
-                                        )
-                                      ],
-                                    );
+                                  if (snapshot.hasData) {
+                                    isCustomerHeaderShown = false;
+                                    isContactHeaderShown = false;
+                                    if (snapshot.data!.isNotEmpty) {
+                                      List<Customer> customerList =
+                                          snapshot.data!;
+                                      return ListView.builder(
+                                          itemCount: customerList.length,
+                                          itemBuilder: (context, index) =>
+                                              processListItem(
+                                                  context, index, customerList));
+                                    } else if (searchTextController.text ==
+                                            null ||
+                                        searchTextController.text.isEmpty) {
+                                      return Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: const <Widget>[
+                                          Image(
+                                            image: AssetImage(
+                                                'assets/fogg-no-messages.png'),
+                                          ),
+                                          Text(
+                                            'click on "Add cutomer" to get started',
+                                            style: TextStyle(
+                                                color: Color(0xff1d4ff2),
+                                                fontWeight: FontWeight.bold),
+                                          )
+                                        ],
+                                      );
+                                    }
                                   }
-                                }
-                                return Container();
-                              },
-                            ),
-                          );
+                                  return Container();
+                                },
+                              ),
+                            );
+                          } else {
+                            return Expanded(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: const <Widget>[
+                                  Image(
+                                    image:
+                                        AssetImage('assets/fogg-no-messages.png'),
+                                  ),
+                                  Text(
+                                    'click on "Add cutomer" to get started',
+                                    style: TextStyle(
+                                        color: Color(0xff1d4ff2),
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                ],
+                              ),
+                            );
+                          }
                         } else {
-                          return Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: const <Widget>[
-                                Image(
-                                  image:
-                                      AssetImage('assets/fogg-no-messages.png'),
-                                ),
-                                Text(
-                                  'click on "Add cutomer" to get started',
-                                  style: TextStyle(
-                                      color: Color(0xff1d4ff2),
-                                      fontWeight: FontWeight.bold),
-                                )
-                              ],
-                            ),
-                          );
+                          return Container();
                         }
-                      } else {
-                        return Container();
-                      }
-                    }),
-              ],
+                      }),
+                ],
+              ),
             ),
           ),
         ),
@@ -366,7 +368,7 @@ class _CreditBookState extends State<CreditBook> {
                 'iconColor': kColorSlabs[index % kColorSlabs.length].value,
                 'customerId': customerList[index].customerId,
                 'customerName': customerList[index].displayName,
-                'ledgerId': customerToLedgerMap[customerList[index].customerId]
+                'ledgerId': customerToLedgerMap![customerList[index].customerId]
                     ?.ledgerId
               });
             },
@@ -409,10 +411,10 @@ class _CreditBookState extends State<CreditBook> {
                   ),
                   Expanded(
                     flex: 2,
-                    child: getBalanceView(customerToLedgerMap[
+                    child: getBalanceView(customerToLedgerMap![
                                 customerList[index].customerId] !=
                             null
-                        ? customerToLedgerMap[customerList[index].customerId]!
+                        ? customerToLedgerMap![customerList[index].customerId]!
                             .balance!
                         : 0),
                   ),
@@ -442,7 +444,7 @@ class _CreditBookState extends State<CreditBook> {
   The view which shows what was the last activity/transaction for this particular customer
    */
   getTransactionView(Customer customer) {
-    Ledger ledger = customerToLedgerMap[customer.customerId]!;
+    Ledger ledger = customerToLedgerMap![customer.customerId]!;
     if (ledger != null &&
         ledger.hasPayments != null &&
         ledger.hasPayments! &&
@@ -531,7 +533,7 @@ class _CreditBookState extends State<CreditBook> {
           }
         }
       }
-      customerStreamController.add(tempCustomerList);
+      customerStreamController?.add(tempCustomerList);
     });
   }
 }

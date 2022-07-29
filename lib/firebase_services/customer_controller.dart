@@ -59,10 +59,10 @@ class CustomerController {
 
   static acceptBid(Bid bid) async {
     await requests
-        .doc(bid.request.requestId)
+        .doc(bid.request?.requestId)
         .update({"status": "active"});
     return requests
-        .doc(bid.request.requestId)
+        .doc(bid.request?.requestId)
         .collection("bids")
         .doc(bid.ownerId)
         .update({"status": "active"});
@@ -70,7 +70,7 @@ class CustomerController {
 
   static Stream<DocumentSnapshot> getBid(Bid bid) {
     return requests
-        .doc(bid.request.requestId)
+        .doc(bid.request?.requestId)
         .collection("bids")
         .doc(bid.ownerId)
         .snapshots();
@@ -78,10 +78,10 @@ class CustomerController {
 
   static markAsComplete(Bid bid) async {
     await requests
-        .doc(bid.request.requestId)
+        .doc(bid.request?.requestId)
         .update({"status": "complete"});
     return requests
-        .doc(bid.request.requestId)
+        .doc(bid.request?.requestId)
         .collection("bids")
         .doc(bid.ownerId)
         .update({"status": "complete"});
